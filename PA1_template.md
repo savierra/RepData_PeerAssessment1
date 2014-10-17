@@ -168,6 +168,14 @@ median(aggregate(steps ~ date,data=file,mean)[,2]) - median(aggregate(steps ~ da
 
 
 ```r
+require("lattice")
+```
+
+```
+## Loading required package: lattice
+```
+
+```r
 # Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 
 file$week<-ifelse(weekdays(as.Date(file$date)) %in% c("Sunday","Saturday"), "weekend","weekday")
@@ -176,10 +184,8 @@ file$week<-ifelse(weekdays(as.Date(file$date)) %in% c("Sunday","Saturday"), "wee
 weekendD <- file[file$week=="weekend",]
 weekdayD <- file[file$week=="weekday",]
 
-plot(aggregate(steps~interval,data=weekendD,mean), type="l", xlab= "Interval (minutes)", ylab="Average Number of Steps", col="blue",lwd=2)
-lines(aggregate(steps~interval,data=weekdayD,mean),col="darkgreen",lty=2,lwd=2)
-abline(mean(aggregate(steps ~ date,data=file,mean)[,2]),0, col="red",lty=3,lwd=2)
-legend("topright", bty="n", legend=c("Average Number of Steps in Weekends","Average Number of Steps in Weekdays","Average Number of Steps Across all Days"),lty=c(1,2,3),col=c("blue","darkgreen","red"),lwd=c(2,2,2))
+
+xyplot(steps~interval | factor(week),data=file,type=c("r","l"),auto.key=list(lines=TRUE))
 ```
 
 ![plot of chunk unnamed-chunk-5](./PA1_template_files/figure-html/unnamed-chunk-5.png) 
